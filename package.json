@@ -1,0 +1,22 @@
+{
+  "name": "bitorjs-decorators",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitorjs/decorators.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bitorjs/decorators/issues"
+  },
+  "homepage": "https://github.com/bitorjs/decorators#readme",
+  "dependencies": {
+    "reflect-metadata": "^0.1.12"
+  }
+}
