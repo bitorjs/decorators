@@ -9,7 +9,6 @@ const metakeys = ["controller"].concat(methods).map(item => {
 });
 
 const Exports = {};
-Exports["methods"] = methods;
 
 metakeys.map(key => {
   Exports[key] = (path) => (target, name) => {
@@ -20,15 +19,6 @@ metakeys.map(key => {
     }, target, name);
   }
 })
-
-Exports['Service'] = (service) => (target, name) => {
-  Reflect.defineMetadata('Service', service, target, name);
-}
-
-Exports['getServiceName'] = (service) => {
-  return Reflect.getMetadata('Service', service);
-}
-
 
 Exports['iterator'] = function (classname, callback) {
   const prefix = Reflect.getMetadata('Controller', classname) || '';
@@ -42,5 +32,23 @@ Exports['iterator'] = function (classname, callback) {
     }, '')
   })
 }
+
+Exports['Service'] = (service) => (target, name) => {
+  Reflect.defineMetadata('Service', service, target, name);
+}
+
+Exports['getService'] = (service) => {
+  return Reflect.getMetadata('Service', service);
+}
+
+Exports['Middleware'] = (middleware) => (target, name) => {
+  Reflect.defineMetadata('Middleware', middleware, target, name);
+}
+
+Exports['getMiddleware'] = (middleware) => {
+  return Reflect.getMetadata('Middleware', middleware);
+}
+
+Exports["methods"] = methods;
 
 module.exports = Exports;
