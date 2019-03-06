@@ -41,12 +41,17 @@ Exports['getService'] = (service) => {
   return Reflect.getMetadata('Service', service);
 }
 
-Exports['Middleware'] = (middleware) => (target, name) => {
-  Reflect.defineMetadata('Middleware', middleware, target, name);
+Exports['Middleware'] = (middleware) => (target, propertyName) => {
+  let middlewares = Reflect.getMetadata('Middleware', target, propertyName);
+  if (middlewares === undefined) {
+    middlewares = []
+  }
+  middlewares.push(middleware)
+  Reflect.defineMetadata('Middleware', middlewares, target, propertyName);
 }
 
-Exports['getMiddleware'] = (middleware) => {
-  return Reflect.getMetadata('Middleware', middleware);
+Exports['getMiddleware'] = (target, propertyName) => {
+  return Reflect.getMetadata('Middleware', target, propertyName);
 }
 
 Exports["methods"] = methods;
