@@ -1,13 +1,18 @@
 require('reflect-metadata');
-const methods = ["Get", "Post", "Delete", "Put", "Head"];
-const controller = ['Namespace', 'Controller'];
-const service = ['Service'];
-const metakeys = ["Controller", "Get", "Post", "Delete", "Put", "Head"];
+const methods = [
+  "get", "post", "put", "head", "delete", "all", "options", "patch"
+];
+const metakeys = ["controller"].concat(methods).map(item => {
+  return item.replace(/\b\w+\b/g, function (word) {
+    return word.substring(0, 1).toUpperCase() + word.substring(1);
+  });
+});
 
-module.exports["methods"] = methods.map(item => item.toLowerCase());
+const Exports = {};
+Exports["methods"] = methods;
 
 metakeys.map(key => {
-  module.exports[key] = (path) => (target, name, descriptor) => {
+  Exports[key] = (path) => (target, name) => {
     Reflect.defineMetadata(key, {
       path,
       prototype: name,
@@ -16,16 +21,16 @@ metakeys.map(key => {
   }
 })
 
-module.exports['Service'] = (service) => (target, name, descriptor) => {
+Exports['Service'] = (service) => (target, name) => {
   Reflect.defineMetadata('Service', service, target, name);
 }
 
-module.exports['getServiceName'] = (classname) => {
-  return Reflect.getMetadata('Service', classname);
+Exports['getServiceName'] = (service) => {
+  return Reflect.getMetadata('Service', service);
 }
 
 
-module.exports['iterator'] = function (classname, callback) {
+Exports['iterator'] = function (classname, callback) {
   const prefix = Reflect.getMetadata('Controller', classname) || '';
   const ownPropertyNames = Object.getOwnPropertyNames(classname['prototype']);
   ownPropertyNames.forEach(propertyName => {
@@ -37,3 +42,5 @@ module.exports['iterator'] = function (classname, callback) {
     }, '')
   })
 }
+
+module.exports = Exports;
